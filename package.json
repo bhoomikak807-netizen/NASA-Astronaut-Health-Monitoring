@@ -1,0 +1,16 @@
+{
+  "name": "astra-sentinel-ai-project",
+  "private": true,
+  "type": "commonjs",
+  "description": "ASTRA-SENTINEL AI website. Run `npm install` then `npm run dev` from this folder.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "postinstall": "npm --prefix frontend install --no-audit --no-fund",
+    "dev": "npm --prefix frontend run dev -- --open",
+    "build": "npm --prefix frontend run build",
+    "preview": "npm --prefix frontend run preview -- --port 4173 --open",
+    "test": "node --test part4-engine/engine.test.js"
+  }
+}
