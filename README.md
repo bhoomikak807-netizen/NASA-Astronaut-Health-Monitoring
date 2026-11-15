@@ -1,2 +1,2 @@
 # NASA-Astronaut-Health-Monitoring
-Astronaut health monitoring system.
+ASTRA-SENTINEL AI – An independent SpaceTech research prototype for AI-powered astronaut health monitoring, spacecraft environmental safety, anomaly detection, and mission-control visualization.
