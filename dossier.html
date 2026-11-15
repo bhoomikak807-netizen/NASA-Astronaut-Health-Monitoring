@@ -1,0 +1,916 @@
+<title>QuantumNav Research</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="QuantumNav Research: a simulation-stage concept for cold-atom inertial sensing and pulsar reference navigation in GPS-denied deep space.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a research dossier. Left-aligned text column with figure plates that read as dark observation windows in both themes. */
+:root{
+  --paper:#ECEFF3;
+  --panel:#F8FAFC;
+  --ink:#0F1824;
+  --muted:#4F5B6B;
+  --line:#C6CFD9;
+  --rb:#B0242D;          /* rubidium-laser red: primary accent */
+  --pulsar:#17698A;      /* pulsar blue: secondary accent */
+  --warn-bg:#FBEFD9; --warn-ink:#6B4A0E; --warn-line:#E2C27F;
+  --plate:#0D1522; --plate-ink:#E6ECF2; --plate-dim:#8B98AA; --plate-line:#2A3749;
+  --rb-glow:#FF5C61; --ps-glow:#5CC8E8; --ok:#5BC28C; --amber:#E7B04A;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0A0E14; --panel:#111823; --ink:#E3E8EE; --muted:#97A3B2; --line:#243041;
+    --rb:#EE5E64; --pulsar:#5BBFDF;
+    --warn-bg:#2A2110; --warn-ink:#F0D08F; --warn-line:#5E4A1F;
+    --plate:#060A10; --plate-line:#223042;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0A0E14; --panel:#111823; --ink:#E3E8EE; --muted:#97A3B2; --line:#243041;
+  --rb:#EE5E64; --pulsar:#5BBFDF;
+  --warn-bg:#2A2110; --warn-ink:#F0D08F; --warn-line:#5E4A1F;
+  --plate:#060A10; --plate-line:#223042;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.62}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--pulsar)}
+:focus-visible{outline:2px solid var(--rb);outline-offset:3px;border-radius:2px}
+
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:24px;padding-block:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--display);font-weight:750;font-stretch:112%;letter-spacing:.01em;font-size:17px}
+.brand svg{width:26px;height:26px;flex:none}
+.nav{display:flex;gap:4px 18px;flex-wrap:wrap;margin-left:auto}
+.nav a{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 0;border-bottom:1px solid transparent}
+.nav a:hover{color:var(--ink);border-bottom-color:var(--rb)}
+@media (max-width:760px){.nav{margin-left:0;width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}.nav a{white-space:nowrap}}
+
+/* Type */
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--rb);font-weight:500}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+h1{font-size:clamp(38px,6.4vw,76px);line-height:.98;font-weight:780;font-stretch:118%;letter-spacing:-.015em}
+h2{font-size:clamp(28px,3.6vw,44px);line-height:1.05;font-weight:740;font-stretch:112%;letter-spacing:-.01em}
+h3{font-size:21px;line-height:1.2;font-weight:680;font-stretch:104%}
+p{margin:0}
+.lead{font-size:clamp(18px,1.6vw,21px);line-height:1.55;color:var(--muted);max-width:60ch}
+.prose{display:grid;gap:16px;max-width:66ch}
+.mono{font-family:var(--mono)}
+
+/* Hero */
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:48px;align-items:center;padding-block:56px 40px}
+.hero-copy{display:grid;gap:22px;min-width:0}
+.hero h1 em{font-style:normal;color:var(--rb)}
+.status{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;border-top:1px solid var(--line);padding-top:18px;font-size:14.5px}
+.status dt{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.status dd{margin:0}
+.pill{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--rb);color:var(--rb);border-radius:999px;font-weight:500}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--rb)}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr;gap:32px;padding-block:36px 28px}}
+
+/* Notice */
+.notice{border:1px solid var(--warn-line);background:var(--warn-bg);color:var(--warn-ink);padding:16px 20px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;font-size:15.5px;line-height:1.55}
+.notice svg{width:22px;height:22px;margin-top:2px}
+.notice b{font-weight:600}
+
+/* Facts strip */
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-block:1px solid var(--line);margin-top:28px}
+.fact{padding:20px 20px 20px 0;display:grid;gap:4px;min-width:0}
+.fact + .fact{padding-left:20px;border-left:1px solid var(--line)}
+.fact .v{font-family:var(--display);font-stretch:115%;font-weight:720;font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums}
+.fact .k{font-size:14px;color:var(--muted);line-height:1.4}
+@media (max-width:820px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.fact:nth-child(3){padding-left:0;border-left:0}.fact:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* Sections */
+section.block{padding-block:72px;border-top:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:120px minmax(0,1fr);gap:24px;margin-bottom:36px}
+.sec-num{font-family:var(--display);font-weight:800;font-stretch:125%;font-size:56px;line-height:.9;color:var(--rb);font-variant-numeric:tabular-nums}
+.sec-head .eyebrow{color:var(--muted);margin-bottom:10px;display:block}
+@media (max-width:700px){.sec-head{grid-template-columns:1fr;gap:8px}.sec-num{font-size:40px}section.block{padding-block:52px}}
+
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:start}
+.split.wide-fig{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+@media (max-width:900px){.split,.split.wide-fig{grid-template-columns:1fr;gap:32px}}
+.indent{margin-left:144px}
+@media (max-width:700px){.indent{margin-left:0}}
+
+/* Figures */
+figure{margin:0;display:grid;gap:10px;min-width:0}
+.plate{background:var(--plate);border-radius:4px;overflow:hidden;position:relative}
+.plate svg{display:block;width:100%;height:auto}
+.plate.scroll{overflow-x:auto}
+.plate.scroll svg{min-width:640px}
+figcaption{font-size:14px;line-height:1.5;color:var(--muted);max-width:70ch}
+figcaption b{font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-right:6px}
+
+/* SVG paint classes */
+.p-bg{fill:var(--plate)}
+.t{font-family:var(--mono);font-size:12px;fill:var(--plate-ink)}
+.t-s{font-family:var(--mono);font-size:10.5px;fill:var(--plate-dim);letter-spacing:.04em}
+.t-h{font-family:var(--display);font-size:15px;font-weight:700;font-stretch:110%;fill:var(--plate-ink)}
+.t-rb{fill:var(--rb-glow)} .t-ps{fill:var(--ps-glow)} .t-ok{fill:var(--ok)} .t-amber{fill:var(--amber)}
+.ln{stroke:var(--plate-line);fill:none}
+.ln-ink{stroke:var(--plate-ink);fill:none}
+.ln-dim{stroke:var(--plate-dim);fill:none}
+.ln-rb{stroke:var(--rb-glow);fill:none}
+.ln-ps{stroke:var(--ps-glow);fill:none}
+.ln-ok{stroke:var(--ok);fill:none}
+.f-ink{fill:var(--plate-ink)} .f-dim{fill:var(--plate-dim)} .f-rb{fill:var(--rb-glow)} .f-ps{fill:var(--ps-glow)} .f-ok{fill:var(--ok)} .f-amber{fill:var(--amber)} .f-line{fill:var(--plate-line)}
+.star{fill:var(--plate-ink)}
+.box{fill:var(--plate);stroke:var(--plate-line)}
+.beam{animation:beam 1.6s ease-in-out infinite}
+@keyframes beam{0%,100%{opacity:.35}50%{opacity:.9}}
+.blink{animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.45}}
+
+/* Lists and tables */
+.pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:2px solid var(--ink)}
+.pillar{padding:22px 22px 4px 0;display:grid;gap:10px;align-content:start;min-width:0}
+.pillar + .pillar{padding-left:22px;border-left:1px solid var(--line)}
+.pillar .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--pulsar)}
+.pillar p{font-size:15.5px;color:var(--muted)}
+@media (max-width:820px){.pillars{grid-template-columns:1fr}.pillar,.pillar + .pillar{padding:20px 0;border-left:0;border-top:1px solid var(--line)}}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+.steps li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line);counter-increment:s}
+.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:13px;color:var(--rb);padding-top:3px}
+.steps b{display:block;font-weight:600;margin-bottom:2px}
+.steps span{color:var(--muted);font-size:15.5px}
+
+.eq{font-family:var(--mono);font-size:15px;background:var(--panel);border:1px solid var(--line);padding:14px 16px;display:grid;gap:6px;overflow-x:auto}
+.eq small{font-size:12.5px;color:var(--muted);font-family:var(--body)}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--line);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:15px}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;background:color-mix(in srgb,var(--line) 30%,var(--panel))}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600}
+.dir{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:3px;white-space:nowrap}
+.dir.in{color:var(--pulsar);border:1px solid var(--pulsar)}
+.dir.out{color:var(--rb);border:1px solid var(--rb)}
+
+.io{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:36px}
+.io-col{background:var(--panel);border:1px solid var(--line);padding:22px 24px;display:grid;gap:14px;align-content:start;min-width:0}
+.io-col h3{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.io-col.in h3{color:var(--pulsar)} .io-col.out h3{color:var(--rb)}
+.io-col ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.io-col li{display:grid;gap:2px;padding-left:18px;position:relative}
+.io-col li::before{content:"";position:absolute;left:0;top:10px;width:8px;height:2px;background:currentColor}
+.io-col.in li::before{background:var(--pulsar)} .io-col.out li::before{background:var(--rb)}
+.io-col li b{font-weight:600}
+.io-col li span{font-size:14.5px;color:var(--muted)}
+@media (max-width:760px){.io{grid-template-columns:1fr}}
+
+.apps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.app{border-top:3px solid var(--rb);background:var(--panel);padding:24px;display:grid;gap:14px;align-content:start;min-width:0}
+.app:nth-child(2){border-top-color:var(--pulsar)}
+.app ul{margin:0;padding-left:20px;display:grid;gap:6px;color:var(--muted);font-size:15.5px}
+.app .meta{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:760px){.apps{grid-template-columns:1fr}}
+
+.roadmap{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
+.roadmap li{padding:18px 18px 0 0;display:grid;gap:8px;align-content:start;position:relative;min-width:0}
+.roadmap li::before{content:"";position:absolute;top:-6px;left:0;width:11px;height:11px;border-radius:50%;background:var(--paper);border:2px solid var(--line)}
+.roadmap li.done::before{background:var(--ink);border-color:var(--ink)}
+.roadmap li.now::before{background:var(--rb);border-color:var(--rb);box-shadow:0 0 0 4px color-mix(in srgb,var(--rb) 25%,transparent)}
+.roadmap .ph{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.roadmap li.now .ph{color:var(--rb)}
+.roadmap p{font-size:15px;color:var(--muted)}
+@media (max-width:820px){.roadmap{grid-template-columns:1fr 1fr;row-gap:24px}}
+@media (max-width:480px){.roadmap{grid-template-columns:1fr}}
+
+.console{background:var(--plate);color:var(--plate-ink);font-family:var(--mono);font-size:13.5px;padding:18px 20px;border-radius:4px;display:grid;gap:4px;overflow-x:auto}
+.console .k{color:var(--plate-dim)}
+.console .ok{color:var(--ok)}
+.console .rb{color:var(--rb-glow)}
+
+.gloss{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;margin:0}
+.gloss div{padding:14px 0;border-top:1px solid var(--line);display:grid;gap:3px}
+.gloss dt{font-weight:600}
+.gloss dd{margin:0;color:var(--muted);font-size:15px}
+@media (max-width:760px){.gloss{grid-template-columns:1fr}}
+
+.refs{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--muted);font-size:14.5px;max-width:80ch}
+
+footer{border-top:1px solid var(--line);padding-block:36px 48px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between}
+
+.mt-l{margin-top:48px}.mt-m{margin-top:28px}
+.stack{display:grid;gap:28px;min-width:0}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="QuantumNav Research, back to top">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="1.6"/><ellipse cx="16" cy="16" rx="14" ry="5.5" fill="none" stroke="currentColor" stroke-width="1.2" transform="rotate(-30 16 16)"/><circle cx="16" cy="16" r="3.4" style="fill:var(--rb)"/></svg>
+      QuantumNav Research
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#overview">Overview</a>
+      <a href="#problem">Problem</a>
+      <a href="#method">How it works</a>
+      <a href="#dataflow">Data flow</a>
+      <a href="#applications">Applications</a>
+      <a href="#status">Status</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="pill">Research Concept</span>
+      <h1>Navigation for spacecraft <em>beyond the reach</em> of GPS.</h1>
+      <p class="lead">QuantumNav Research explores how quantum cold-atom inertial sensing and pulsar reference navigation could let a spacecraft know its own position and velocity in deep space, without waiting on Earth.</p>
+      <dl class="status">
+        <dt>Maturity</dt><dd>Research Concept: theoretical and simulation modeling only</dd>
+        <dt>Est. TRL</dt><dd>1–2 (basic principles observed; concept formulated)</dd>
+        <dt>Domain</dt><dd>GPS-denied deep space and cislunar navigation</dd>
+      </dl>
+    </div>
+
+    <!-- FIGURE 1 -->
+    <figure>
+      <div class="plate">
+        <svg viewBox="0 0 600 420" role="img" aria-labelledby="f1t">
+          <title id="f1t">A spacecraft far from Earth fixing its position from three pulsar sightlines.</title>
+          <defs>
+            <radialGradient id="earthG" cx="35%" cy="35%" r="70%"><stop offset="0" stop-color="#5FA6D6"/><stop offset=".6" stop-color="#1E5A8A"/><stop offset="1" stop-color="#0B2540"/></radialGradient>
+            <radialGradient id="glowRb" r="50%"><stop offset="0" stop-color="#FF5C61" stop-opacity=".9"/><stop offset="1" stop-color="#FF5C61" stop-opacity="0"/></radialGradient>
+            <radialGradient id="glowPs" r="50%"><stop offset="0" stop-color="#9FE4F7" stop-opacity="1"/><stop offset=".35" stop-color="#5CC8E8" stop-opacity=".6"/><stop offset="1" stop-color="#5CC8E8" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect class="p-bg" width="600" height="420"/>
+          <g data-stars="110" data-seed="7" data-w="600" data-h="420"></g>
+          <!-- Earth + GEO -->
+          <circle cx="80" cy="372" r="118" class="ln-dim" stroke-dasharray="3 5" stroke-width="1"/>
+          <text x="128" y="244" class="t-s">GEO · 35,786 km</text>
+          <circle cx="80" cy="372" r="40" fill="url(#earthG)"/>
+          <text x="40" y="408" class="t-s">EARTH</text>
+          <!-- trajectory -->
+          <path d="M112,346 C210,300 300,252 410,214 S560,150 610,128" class="ln-ps" stroke-width="1.6" stroke-dasharray="2 6" stroke-linecap="round"/>
+          <!-- pulsars -->
+          <g transform="translate(92,74)"><polygon points="0,0 -26,-22 -16,-28" class="f-ps beam" opacity=".5"/><polygon points="0,0 26,22 16,28" class="f-ps beam" opacity=".5"/><circle r="16" fill="url(#glowPs)"/><circle r="3" class="star"/></g>
+          <text x="58" y="112" class="t-s">PSR J0437−4715</text>
+          <g transform="translate(318,46)"><polygon points="0,0 -22,-24 -12,-28" class="f-ps beam" opacity=".5"/><polygon points="0,0 22,24 12,28" class="f-ps beam" opacity=".5"/><circle r="16" fill="url(#glowPs)"/><circle r="3" class="star"/></g>
+          <text x="338" y="44" class="t-s">PSR B1937+21</text>
+          <g transform="translate(548,64)"><polygon points="0,0 -28,-16 -22,-24" class="f-ps beam" opacity=".5"/><polygon points="0,0 28,16 22,24" class="f-ps beam" opacity=".5"/><circle r="16" fill="url(#glowPs)"/><circle r="3" class="star"/></g>
+          <text x="470" y="100" class="t-s">PSR B0531+21</text>
+          <!-- sightlines -->
+          <line x1="92" y1="74" x2="410" y2="214" class="ln-ps" stroke-dasharray="4 4" opacity=".55"/>
+          <line x1="318" y1="46" x2="410" y2="214" class="ln-ps" stroke-dasharray="4 4" opacity=".55"/>
+          <line x1="548" y1="64" x2="410" y2="214" class="ln-ps" stroke-dasharray="4 4" opacity=".55"/>
+          <!-- spacecraft -->
+          <g transform="translate(410,214) rotate(-18)">
+            <circle r="34" fill="url(#glowRb)" opacity=".35" class="blink"/>
+            <rect x="-64" y="-7" width="44" height="14" class="f-line" stroke="#5CC8E8" stroke-width="1"/>
+            <path d="M-53,-7v14M-42,-7v14M-31,-7v14" stroke="#5CC8E8" stroke-width=".7"/>
+            <rect x="20" y="-7" width="44" height="14" class="f-line" stroke="#5CC8E8" stroke-width="1"/>
+            <path d="M31,-7v14M42,-7v14M53,-7v14" stroke="#5CC8E8" stroke-width=".7"/>
+            <line x1="-20" y1="0" x2="20" y2="0" class="ln-ink"/>
+            <rect x="-13" y="-11" width="26" height="22" rx="2" class="f-ink"/>
+            <path d="M-8,-11 a8,5 0 0 1 16,0" class="ln-ink" stroke-width="1.4"/>
+            <circle r="3.2" class="f-rb"/>
+          </g>
+          <!-- readout -->
+          <g transform="translate(372,300)">
+            <rect width="212" height="100" class="box" rx="3"/>
+            <text x="12" y="20" class="t-s">STATE VECTOR · SIMULATED</text>
+            <text x="12" y="44" class="t"><tspan class="t-rb">r</tspan> −1.42e5  2.87e5  1.06e4 km</text>
+            <text x="12" y="64" class="t"><tspan class="t-rb">v</tspan> −0.712  0.384  0.021 km/s</text>
+            <text x="12" y="86" class="t-s">SOURCE  CAI + STAR + PULSAR</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 1</b>Concept view. The spacecraft fuses three pulsar sightlines with its own cold-atom inertial measurements to solve for position and velocity on board. Not to scale; values are simulated.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="notice" role="note">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 1 21h22L12 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.5" r="1.2" fill="currentColor"/></svg>
+    <p><b>Research Concept Notice.</b> QuantumNav Research is an exploratory conceptual initiative evaluated through simulation and published space research literature. It is not an active, aerospace-certified or space-deployed flight system.</p>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><span class="v">35,786 km</span><span class="k">Geostationary altitude. GNSS main-lobe coverage ends below this shell.</span></div>
+    <div class="fact"><span class="v">3</span><span class="k">Deep Space Network complexes shared by every NASA deep-space mission.</span></div>
+    <div class="fact"><span class="v">~1 µK</span><span class="k">Order of atom temperature used in cold-atom interferometry.</span></div>
+    <div class="fact"><span class="v">1.56 ms</span><span class="k">Spin period of PSR B1937+21, one of the most stable natural clocks known.</span></div>
+  </div>
+</div>
+
+<!-- 1. OVERVIEW -->
+<section class="block mt-l" id="overview">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">1</div>
+      <div>
+        <span class="eyebrow">Technology Overview</span>
+        <h2>Two physical references that do not depend on Earth.</h2>
+      </div>
+    </div>
+    <div class="indent stack">
+      <div class="split">
+        <div class="prose">
+          <p>QuantumNav Research explores <strong>quantum cold-atom inertial sensing</strong> and <strong>optical pulsar reference navigation</strong> for spacecraft operating in GPS-denied deep space.</p>
+          <p>A cold-atom interferometer measures acceleration and rotation by watching how clouds of laser-cooled atoms behave as matter waves. Because every atom of a given isotope is identical, the sensor has no mechanical parts to wear, creep or age, which is the main source of drift in conventional inertial units.</p>
+          <p>Pulsars give the absolute reference that inertial sensing alone cannot. Millisecond pulsars rotate with clock-like regularity. Comparing the arrival time of their pulses at the spacecraft against a timing model places the vehicle along each pulsar's line of sight.</p>
+          <p>Star tracker fixes provide attitude, so the inertial and pulsar measurements can be expressed in one inertial reference frame.</p>
+        </div>
+        <!-- FIGURE 2 -->
+        <figure>
+          <div class="plate">
+            <svg viewBox="0 0 520 340" role="img" aria-labelledby="f2t">
+              <title id="f2t">Magneto-optical trap: six laser beams and two coils cool a rubidium cloud.</title>
+              <defs>
+                <radialGradient id="cloud" r="50%"><stop offset="0" stop-color="#FFD3D4"/><stop offset=".3" stop-color="#FF5C61" stop-opacity=".85"/><stop offset="1" stop-color="#FF5C61" stop-opacity="0"/></radialGradient>
+                <linearGradient id="beamH" x1="0" x2="1"><stop offset="0" stop-color="#FF5C61" stop-opacity=".05"/><stop offset=".5" stop-color="#FF5C61" stop-opacity=".35"/><stop offset="1" stop-color="#FF5C61" stop-opacity=".05"/></linearGradient>
+                <linearGradient id="beamV" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#FF5C61" stop-opacity=".05"/><stop offset=".5" stop-color="#FF5C61" stop-opacity=".35"/><stop offset="1" stop-color="#FF5C61" stop-opacity=".05"/></linearGradient>
+              </defs>
+              <rect class="p-bg" width="520" height="340"/>
+              <!-- vacuum cell -->
+              <rect x="150" y="60" width="220" height="220" rx="10" class="ln" stroke-width="1.4"/>
+              <text x="160" y="296" class="t-s">ULTRA-HIGH VACUUM CELL</text>
+              <!-- beams -->
+              <rect x="30" y="160" width="460" height="20" fill="url(#beamH)"/>
+              <rect x="250" y="16" width="20" height="308" fill="url(#beamV)"/>
+              <rect x="40" y="160" width="440" height="20" fill="url(#beamH)" transform="rotate(-38 260 170)"/>
+              <!-- arrows inward -->
+              <g class="f-rb">
+                <polygon points="60,170 48,164 48,176"/><polygon points="460,170 472,164 472,176"/>
+                <polygon points="260,40 254,28 266,28"/><polygon points="260,300 254,312 266,312"/>
+                <polygon points="110,287 99,286 106,297" /><polygon points="410,53 421,54 414,43"/>
+              </g>
+              <!-- coils -->
+              <ellipse cx="260" cy="92" rx="78" ry="16" class="ln-amber" style="stroke:var(--amber);fill:none" stroke-width="3"/>
+              <ellipse cx="260" cy="248" rx="78" ry="16" style="stroke:var(--amber);fill:none" stroke-width="3"/>
+              <text x="346" y="86" class="t-s t-amber">ANTI-HELMHOLTZ COIL</text>
+              <text x="346" y="262" class="t-s t-amber">ANTI-HELMHOLTZ COIL</text>
+              <!-- cloud -->
+              <circle cx="260" cy="170" r="34" fill="url(#cloud)" class="blink"/>
+              <circle cx="260" cy="170" r="5" style="fill:#FFE8E8"/>
+              <line x1="282" y1="186" x2="356" y2="214" class="ln-dim"/>
+              <text x="360" y="212" class="t">⁸⁷Rb cloud</text>
+              <text x="360" y="228" class="t-s">≈10⁸ atoms · few µK</text>
+              <text x="24" y="30" class="t">Cooling beams</text>
+              <text x="24" y="46" class="t-s">780 nm · σ⁺/σ⁻ · 3 axes</text>
+            </svg>
+          </div>
+          <figcaption><b>Fig. 2</b>Magneto-optical trap. Three pairs of counter-propagating 780 nm laser beams and a quadrupole magnetic field slow rubidium-87 atoms to microkelvin temperatures before each measurement.</figcaption>
+        </figure>
+      </div>
+
+      <div class="pillars mt-m">
+        <div class="pillar"><span class="tag">Inertial</span><h3>Cold-atom interferometer</h3><p>Measures 3D acceleration and angular velocity from the phase of atomic matter waves. Scale factor is set by the laser wavelength, a fixed physical constant.</p></div>
+        <div class="pillar"><span class="tag">Absolute position</span><h3>Pulsar timing reference</h3><p>Pulse arrival times from known millisecond pulsars bound accumulated position error along several independent sky directions.</p></div>
+        <div class="pillar"><span class="tag">Attitude</span><h3>Star tracker</h3><p>Matches observed star patterns to a catalog to give spacecraft orientation, aligning every sensor to one inertial frame.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. PROBLEM -->
+<section class="block" id="problem">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">2</div>
+      <div>
+        <span class="eyebrow">Problem Addressed</span>
+        <h2>GPS stops working long before the Moon, and Earth tracking is a shared queue.</h2>
+      </div>
+    </div>
+    <div class="indent stack">
+      <div class="prose">
+        <p>Terrestrial GNSS signals from GPS and Galileo are aimed at Earth. Their main beams do not reach beyond geostationary orbit. A few missions have tracked weak sidelobe signals farther out, but accuracy drops quickly with distance and no usable service exists in deep space.</p>
+      </div>
+
+      <!-- FIGURE 3 -->
+      <figure>
+        <div class="plate scroll">
+          <svg viewBox="0 0 660 250" role="img" aria-labelledby="f3t">
+            <title id="f3t">Log-scale distance chart from Earth showing where GNSS coverage ends.</title>
+            <rect class="p-bg" width="660" height="250"/>
+            <!-- bands: x = 50 + (log10(km) - 2) * 80 -->
+            <rect x="50" y="86" width="204.3" height="62" class="f-ok" opacity=".18"/>
+            <rect x="254.3" y="86" width="85.7" height="62" class="f-amber" opacity=".18"/>
+            <rect x="340" y="86" width="270" height="62" class="f-rb" opacity=".14"/>
+            <text x="60" y="114" class="t t-ok">GNSS main lobe</text>
+            <text x="60" y="132" class="t-s">usable service</text>
+            <text x="262" y="114" class="t t-amber">Sidelobe</text>
+            <text x="262" y="132" class="t-s">weak, sparse</text>
+            <text x="352" y="114" class="t t-rb">No usable GNSS signal</text>
+            <text x="352" y="132" class="t-s">DSN tracking or onboard navigation</text>
+            <!-- markers -->
+            <g class="ln-ink" stroke-width="1">
+              <line x1="99.8" y1="66" x2="99.8" y2="160"/>
+              <line x1="234.4" y1="48" x2="234.4" y2="160"/>
+              <line x1="254.3" y1="66" x2="254.3" y2="160"/>
+              <line x1="336.8" y1="66" x2="336.8" y2="160"/>
+              <line x1="384" y1="48" x2="384" y2="160"/>
+              <line x1="558" y1="66" x2="558" y2="160"/>
+              <line x1="594" y1="48" x2="594" y2="160"/>
+            </g>
+            <text x="99.8" y="60" class="t-s" text-anchor="middle">ISS 420</text>
+            <text x="234.4" y="42" class="t-s" text-anchor="middle">GPS 20,200</text>
+            <text x="254.3" y="60" class="t-s" text-anchor="start">GEO 35,786</text>
+            <text x="336.8" y="60" class="t-s" text-anchor="middle">MOON 384,400</text>
+            <text x="384" y="42" class="t-s" text-anchor="middle">SUN–EARTH L2 1.5M</text>
+            <text x="558" y="60" class="t-s" text-anchor="end">MARS ~225M</text>
+            <text x="594" y="42" class="t-s" text-anchor="end">JUPITER ~630M</text>
+            <!-- axis -->
+            <line x1="50" y1="172" x2="610" y2="172" class="ln-dim"/>
+            <g class="ln-dim">
+              <line x1="50" y1="172" x2="50" y2="178"/><line x1="130" y1="172" x2="130" y2="178"/><line x1="210" y1="172" x2="210" y2="178"/><line x1="290" y1="172" x2="290" y2="178"/><line x1="370" y1="172" x2="370" y2="178"/><line x1="450" y1="172" x2="450" y2="178"/><line x1="530" y1="172" x2="530" y2="178"/><line x1="610" y1="172" x2="610" y2="178"/>
+            </g>
+            <g class="t-s" text-anchor="middle">
+              <text x="50" y="194">10²</text><text x="130" y="194">10³</text><text x="210" y="194">10⁴</text><text x="290" y="194">10⁵</text><text x="370" y="194">10⁶</text><text x="450" y="194">10⁷</text><text x="530" y="194">10⁸</text><text x="610" y="194">10⁹</text>
+            </g>
+            <text x="50" y="224" class="t-s">DISTANCE FROM EARTH'S SURFACE / CENTER · KM · LOG SCALE</text>
+          </svg>
+        </div>
+        <figcaption><b>Fig. 3</b>Where satellite navigation runs out, on a logarithmic distance scale. Each gridline is ten times farther than the last. Mars and Jupiter use average distances; both vary widely with orbital position.</figcaption>
+      </figure>
+
+      <div class="split wide-fig mt-m">
+        <div class="prose">
+          <p>Beyond that boundary, spacecraft are navigated from the ground. NASA's Deep Space Network uses three antenna complexes about 120° apart in longitude so that at least one can always see a given spacecraft. Ranging and Doppler data come back to Earth, orbit solutions are computed by navigation teams, and corrections are sent up again.</p>
+          <p>This works, but it creates three bottlenecks:</p>
+          <ul class="steps" style="counter-reset:none">
+            <li style="grid-template-columns:1fr"><b>Antenna time is scarce.</b><span>Dozens of missions share the same dishes, and demand grows as more spacecraft head to the Moon and beyond.</span></li>
+            <li style="grid-template-columns:1fr"><b>Light-time delay.</b><span>Round-trip signals to Mars take up to about 44 minutes, so the ground cannot react in real time to a trajectory error.</span></li>
+            <li style="grid-template-columns:1fr"><b>Single point of dependence.</b><span>Navigation stops when contact is lost, during solar conjunction, or behind a planet or the Moon.</span></li>
+          </ul>
+        </div>
+        <!-- FIGURE 4 -->
+        <figure>
+          <div class="plate">
+            <svg viewBox="0 0 560 320" role="img" aria-labelledby="f4t">
+              <title id="f4t">Three Deep Space Network complexes around Earth and one-way light times to distant targets.</title>
+              <defs><radialGradient id="earthG2" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#5FA6D6"/><stop offset=".65" stop-color="#1E5A8A"/><stop offset="1" stop-color="#0B2540"/></radialGradient></defs>
+              <rect class="p-bg" width="560" height="320"/>
+              <g data-stars="50" data-seed="21" data-w="560" data-h="320"></g>
+              <circle cx="150" cy="170" r="78" fill="url(#earthG2)"/>
+              <circle cx="150" cy="170" r="108" class="ln" stroke-dasharray="2 4"/>
+              <text x="150" y="174" class="t-s" text-anchor="middle" style="fill:#D7E6F2">EARTH</text>
+              <!-- stations at 270°, 30°, 150° -->
+              <g class="f-ink">
+                <g transform="translate(150,92)"><path d="M-9,-4 a9,7 0 0 0 18,0 z"/><rect x="-1.5" y="-1" width="3" height="7"/></g>
+                <g transform="translate(217.5,209) rotate(120)"><path d="M-9,-4 a9,7 0 0 0 18,0 z"/><rect x="-1.5" y="-1" width="3" height="7"/></g>
+                <g transform="translate(82.5,209) rotate(-120)"><path d="M-9,-4 a9,7 0 0 0 18,0 z"/><rect x="-1.5" y="-1" width="3" height="7"/></g>
+              </g>
+              <text x="150" y="70" class="t" text-anchor="middle">Goldstone, USA</text>
+              <text x="232" y="246" class="t">Madrid, Spain</text>
+              <text x="68" y="246" class="t" text-anchor="end">Canberra, AU</text>
+              <text x="150" y="292" class="t-s" text-anchor="middle">~120° APART IN LONGITUDE</text>
+              <!-- link -->
+              <path d="M162,86 L470,48" class="ln-ps" stroke-dasharray="5 5" stroke-width="1.4"/>
+              <path d="M470,58 L162,96" class="ln-rb" stroke-dasharray="5 5" stroke-width="1.4" opacity=".8"/>
+              <g transform="translate(486,52)"><rect x="-8" y="-6" width="16" height="12" rx="1.5" class="f-ink"/><rect x="-26" y="-3" width="16" height="6" class="f-dim"/><rect x="10" y="-3" width="16" height="6" class="f-dim"/></g>
+              <text x="300" y="44" class="t-s t-ps">UPLINK</text>
+              <text x="300" y="98" class="t-s t-rb">DOWNLINK</text>
+              <!-- light time -->
+              <g transform="translate(318,150)">
+                <rect width="220" height="128" class="box" rx="3"/>
+                <text x="14" y="24" class="t-s">ONE-WAY LIGHT TIME</text>
+                <line x1="14" y1="34" x2="206" y2="34" class="ln"/>
+                <text x="14" y="58" class="t">Moon</text><text x="206" y="58" class="t" text-anchor="end">~1.3 s</text>
+                <text x="14" y="84" class="t">Mars</text><text x="206" y="84" class="t" text-anchor="end">3 – 22 min</text>
+                <text x="14" y="110" class="t">Jupiter</text><text x="206" y="110" class="t" text-anchor="end">33 – 53 min</text>
+              </g>
+            </svg>
+          </div>
+          <figcaption><b>Fig. 4</b>Ground-based deep-space tracking. Every position update depends on a scheduled pass through one of three shared complexes, and on signals that take minutes or hours to travel.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. HOW IT WORKS -->
+<section class="block" id="method">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">3</div>
+      <div>
+        <span class="eyebrow">How It Works</span>
+        <h2>Measuring motion with matter waves, then anchoring it to the sky.</h2>
+      </div>
+    </div>
+    <div class="indent stack">
+      <div class="prose">
+        <p>The concept simulates atomic matter-wave interferometry to track 3D acceleration and angular velocity with near-zero sensor drift, enabling autonomous trajectory verification. One measurement cycle runs as follows.</p>
+      </div>
+
+      <div class="split wide-fig">
+        <ol class="steps">
+          <li><div><b>Cool and trap</b><span>Laser cooling gathers about 10⁸ rubidium-87 atoms into a cloud at microkelvin temperature (Fig. 2).</span></div></li>
+          <li><div><b>Release and split</b><span>The trap switches off. A first laser pulse (π/2) puts every atom into a superposition of two momentum states, so each atom travels two paths at once.</span></div></li>
+          <li><div><b>Mirror</b><span>After time T a π pulse swaps the two momentum states, steering the paths back toward each other.</span></div></li>
+          <li><div><b>Recombine and read</b><span>At 2T a final π/2 pulse closes the interferometer. The fraction of atoms in each output state reveals the phase shift Δφ.</span></div></li>
+          <li><div><b>Convert and fuse</b><span>Δφ is converted to acceleration and rotation, integrated into a trajectory, and corrected with star tracker and pulsar fixes.</span></div></li>
+        </ol>
+
+        <!-- FIGURE 5 -->
+        <figure>
+          <div class="plate">
+            <svg viewBox="0 0 640 330" role="img" aria-labelledby="f5t">
+              <title id="f5t">Space-time diagram of a light-pulse atom interferometer with pi-over-two, pi and pi-over-two pulses.</title>
+              <rect class="p-bg" width="640" height="330"/>
+              <!-- pulses -->
+              <g class="f-rb" opacity=".22">
+                <rect x="74" y="56" width="14" height="196"/><rect x="314" y="56" width="14" height="196"/><rect x="554" y="56" width="14" height="196"/>
+              </g>
+              <g class="t t-rb" text-anchor="middle"><text x="81" y="44">π/2</text><text x="321" y="44">π</text><text x="561" y="44">π/2</text></g>
+              <text x="321" y="24" class="t-s" text-anchor="middle">780 nm RAMAN PULSES</text>
+              <!-- paths -->
+              <path d="M81,226 L321,116 L561,116" class="ln-ps" stroke-width="2.4"/>
+              <path d="M81,226 L321,226 L561,116" class="ln-ink" stroke-width="2.4"/>
+              <g><circle cx="81" cy="226" r="6" class="f-ink"/><circle cx="321" cy="116" r="5" class="f-ps"/><circle cx="321" cy="226" r="5" class="f-ink"/><circle cx="561" cy="116" r="6" class="f-rb"/></g>
+              <text x="170" y="150" class="t t-ps" transform="rotate(-24 170 150)">|p + ħk⟩</text>
+              <text x="200" y="244" class="t">|p⟩</text>
+              <text x="420" y="104" class="t t-ps">|p⟩</text>
+              <text x="452" y="196" class="t" transform="rotate(-24 452 196)">|p + ħk⟩</text>
+              <!-- outputs -->
+              <path d="M567,116 l40,-26 M567,116 l40,26" class="ln-dim" stroke-dasharray="3 3"/>
+              <text x="566" y="160" class="t-s">TO DETECTION</text>
+              <!-- axis -->
+              <line x1="60" y1="274" x2="600" y2="274" class="ln-dim"/>
+              <g class="t-s" text-anchor="middle"><text x="81" y="292">t = 0</text><text x="321" y="292">T</text><text x="561" y="292">2T</text></g>
+              <text x="600" y="314" class="t-s" text-anchor="end">TIME →</text>
+              <text x="24" y="150" class="t-s" transform="rotate(-90 24 150)" text-anchor="middle">POSITION</text>
+            </svg>
+          </div>
+          <figcaption><b>Fig. 5</b>Light-pulse atom interferometer, the matter-wave equivalent of a Mach–Zehnder optical interferometer. Any acceleration during the 2T sequence shifts the phase between the two paths.</figcaption>
+        </figure>
+      </div>
+
+      <div class="eq" aria-label="Interferometer phase equations">
+        <div>Δφ<sub>a</sub> = k<sub>eff</sub> · a · T²</div>
+        <div>Δφ<sub>Ω</sub> = 2 k<sub>eff</sub> · (Ω × v) · T²</div>
+        <small>k<sub>eff</sub> is the effective wave number of the laser pulses (about 2 × 2π / 780 nm for counter-propagating Raman beams), a is acceleration, Ω is rotation rate, v is atom velocity and T is the time between pulses. Sensitivity grows with T², so longer free-fall times in microgravity are a natural advantage in space.</small>
+      </div>
+
+      <div class="split mt-m">
+        <!-- FIGURE 6 -->
+        <figure>
+          <div class="plate">
+            <svg viewBox="0 0 640 300" role="img" aria-labelledby="f6t">
+              <title id="f6t">A rotating neutron star emitting beams, and the resulting pulse train compared with a timing model.</title>
+              <defs><radialGradient id="ns" r="50%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".3" stop-color="#9FE4F7"/><stop offset="1" stop-color="#5CC8E8" stop-opacity="0"/></radialGradient></defs>
+              <rect class="p-bg" width="640" height="300"/>
+              <g data-stars="40" data-seed="5" data-w="270" data-h="300"></g>
+              <line x1="150" y1="24" x2="150" y2="276" class="ln-dim" stroke-dasharray="4 4"/>
+              <text x="156" y="36" class="t-s">SPIN AXIS</text>
+              <g class="ln-ps" opacity=".5" stroke-width="1">
+                <ellipse cx="179" cy="163" rx="22" ry="52" transform="rotate(25 179 163)"/>
+                <ellipse cx="121" cy="137" rx="22" ry="52" transform="rotate(25 121 137)"/>
+              </g>
+              <polygon points="150,150 177,33 222,54" class="f-ps beam"/>
+              <polygon points="150,150 123,267 78,246" class="f-ps beam"/>
+              <circle cx="150" cy="150" r="30" fill="url(#ns)"/>
+              <circle cx="150" cy="150" r="7" style="fill:#FFFFFF"/>
+              <text x="210" y="102" class="t-s t-ps">BEAM</text>
+              <text x="40" y="290" class="t-s">NEUTRON STAR ~20 km ACROSS</text>
+              <!-- pulse train -->
+              <text x="300" y="56" class="t">Received pulse train</text>
+              <text x="300" y="74" class="t-s">P = 1.5578 ms · PSR B1937+21</text>
+              <path d="M300,170 H330 l4,-60 l4,60 H372 l4,-60 l4,60 H414 l4,-60 l4,60 H462 l4,-60 l4,60 H498 l4,-60 l4,60 H540 l4,-60 l4,60 H582 l4,-60 l4,60 H620" class="ln-ps" stroke-width="1.6" stroke-linejoin="round"/>
+              <g class="ln-rb" stroke-width="1.4">
+                <line x1="334" y1="186" x2="334" y2="200"/><line x1="376" y1="186" x2="376" y2="200"/><line x1="418" y1="186" x2="418" y2="200"/><line x1="460" y1="186" x2="460" y2="200"/><line x1="502" y1="186" x2="502" y2="200"/><line x1="544" y1="186" x2="544" y2="200"/><line x1="586" y1="186" x2="586" y2="200"/>
+              </g>
+              <text x="300" y="218" class="t-s t-rb">MODEL-PREDICTED ARRIVAL TIMES</text>
+              <path d="M460,232 H466" class="ln-ink"/><line x1="460" y1="226" x2="460" y2="238" class="ln-ink"/><line x1="466" y1="226" x2="466" y2="238" class="ln-ink"/>
+              <text x="472" y="236" class="t">Δt</text>
+              <text x="300" y="266" class="t">Δt × c → offset along line of sight</text>
+            </svg>
+          </div>
+          <figcaption><b>Fig. 6</b>Pulsar timing. A one-pulse offset between observed and predicted arrival time converts to distance along that pulsar's direction. Three or more pulsars constrain a 3D position.</figcaption>
+        </figure>
+
+        <!-- FIGURE 7 -->
+        <figure>
+          <div class="plate">
+            <svg viewBox="0 0 640 300" role="img" aria-labelledby="f7t">
+              <title id="f7t">Star tracker field of view with an identified star pattern and attitude readout.</title>
+              <rect class="p-bg" width="640" height="300"/>
+              <rect x="30" y="24" width="340" height="252" class="ln-dim"/>
+              <g class="ln-dim" stroke-width="1.6">
+                <path d="M30,44 V24 H50 M350,24 H370 V44 M370,256 V276 H350 M50,276 H30 V256"/>
+              </g>
+              <line x1="200" y1="130" x2="200" y2="170" class="ln" /><line x1="180" y1="150" x2="220" y2="150" class="ln"/>
+              <g data-stars="70" data-seed="13" data-x="34" data-y="28" data-w="332" data-h="244"></g>
+              <!-- matched pattern -->
+              <g class="ln-ps" stroke-width="1.2">
+                <polyline points="92,82 168,118 246,74 300,196 168,118"/>
+                <line x1="168" y1="118" x2="140" y2="222"/>
+              </g>
+              <g class="f-ink"><circle cx="92" cy="82" r="3.4"/><circle cx="168" cy="118" r="4"/><circle cx="246" cy="74" r="3"/><circle cx="300" cy="196" r="3.6"/><circle cx="140" cy="222" r="2.8"/></g>
+              <g class="ln-ps" stroke-width="1"><circle cx="92" cy="82" r="9"/><circle cx="168" cy="118" r="9"/><circle cx="246" cy="74" r="9"/><circle cx="300" cy="196" r="9"/><circle cx="140" cy="222" r="9"/></g>
+              <text x="38" y="268" class="t-s">FOV 20° × 15°</text>
+              <!-- readout -->
+              <g transform="translate(398,24)">
+                <text x="0" y="14" class="t-s">ATTITUDE · SIMULATED</text>
+                <line x1="0" y1="24" x2="214" y2="24" class="ln"/>
+                <text x="0" y="50" class="t">q₀  0.7071</text>
+                <text x="0" y="72" class="t">q₁  0.0123</text>
+                <text x="0" y="94" class="t">q₂ −0.7069</text>
+                <text x="0" y="116" class="t">q₃  0.0047</text>
+                <line x1="0" y1="134" x2="214" y2="134" class="ln"/>
+                <text x="0" y="158" class="t-s">STARS MATCHED</text><text x="214" y="158" class="t t-ps" text-anchor="end">5</text>
+                <text x="0" y="182" class="t-s">CATALOG</text><text x="214" y="182" class="t" text-anchor="end">Hipparcos</text>
+                <text x="0" y="206" class="t-s">ACCURACY CLASS</text><text x="214" y="206" class="t" text-anchor="end">arcsecond</text>
+                <text x="0" y="246" class="t-s t-ok">● LOCK</text>
+              </g>
+            </svg>
+          </div>
+          <figcaption><b>Fig. 7</b>Star tracker fix. The geometry between bright stars is matched against a catalog to recover the spacecraft's orientation as a quaternion.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA FLOW -->
+<section class="block" id="dataflow">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num" aria-hidden="true">I/O</div>
+      <div>
+        <span class="eyebrow">Telemetry Inputs and System Outputs</span>
+        <h2>Three sensor streams in, one navigation solution out.</h2>
+      </div>
+    </div>
+    <div class="indent stack">
+      <!-- FIGURE 8 -->
+      <figure>
+        <div class="plate scroll">
+          <svg viewBox="0 0 780 330" role="img" aria-labelledby="f8t">
+            <title id="f8t">Data flow from three telemetry inputs through a navigation filter to two outputs.</title>
+            <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--plate-dim)"/></marker></defs>
+            <rect class="p-bg" width="780" height="330"/>
+            <text x="24" y="28" class="t-s t-ps">TELEMETRY INPUTS</text>
+            <text x="304" y="28" class="t-s">ONBOARD PROCESSING</text>
+            <text x="574" y="28" class="t-s t-rb">SYSTEM OUTPUTS</text>
+            <!-- inputs -->
+            <g>
+              <rect x="24" y="44" width="220" height="72" rx="3" class="box" style="stroke:var(--ps-glow)"/>
+              <text x="40" y="72" class="t-h" style="font-size:14px">Cold-atom phase shifts</text>
+              <text x="40" y="94" class="t-s">Δφ per axis · acceleration + rotation</text>
+              <rect x="24" y="134" width="220" height="72" rx="3" class="box" style="stroke:var(--ps-glow)"/>
+              <text x="40" y="162" class="t-h" style="font-size:14px">Star tracker optical fixes</text>
+              <text x="40" y="184" class="t-s">Attitude quaternion</text>
+              <rect x="24" y="224" width="220" height="72" rx="3" class="box" style="stroke:var(--ps-glow)"/>
+              <text x="40" y="252" class="t-h" style="font-size:14px">Pulsar timing models</text>
+              <text x="40" y="274" class="t-s">Observed vs predicted TOA</text>
+            </g>
+            <g class="ln-dim" stroke-width="1.4" marker-end="url(#arr)">
+              <path d="M244,80 C272,80 276,130 302,130"/>
+              <path d="M244,170 H302"/>
+              <path d="M244,260 C272,260 276,210 302,210"/>
+            </g>
+            <!-- filter -->
+            <rect x="304" y="70" width="230" height="200" rx="3" class="box" style="stroke:var(--plate-ink)" stroke-width="1.4"/>
+            <text x="322" y="100" class="t-h">Navigation filter</text>
+            <text x="322" y="118" class="t-s">EXTENDED / UNSCENTED KALMAN</text>
+            <line x1="322" y1="132" x2="516" y2="132" class="ln"/>
+            <text x="322" y="158" class="t">1  Propagate dynamics</text>
+            <text x="322" y="182" class="t">2  Integrate inertial data</text>
+            <text x="322" y="206" class="t">3  Predict measurements</text>
+            <text x="322" y="230" class="t">4  Update state + covariance</text>
+            <text x="322" y="256" class="t-s">REFERENCE FRAME · ICRF</text>
+            <g class="ln-dim" stroke-width="1.4" marker-end="url(#arr)">
+              <path d="M534,140 C556,140 556,110 572,110"/>
+              <path d="M534,200 C556,200 556,232 572,232"/>
+            </g>
+            <!-- outputs -->
+            <rect x="574" y="70" width="184" height="80" rx="3" class="box" style="stroke:var(--rb-glow)"/>
+            <text x="590" y="98" class="t-h" style="font-size:14px">3D state vector</text>
+            <text x="590" y="118" class="t-s">Position r (x, y, z)</text>
+            <text x="590" y="134" class="t-s">Velocity v (vx, vy, vz)</text>
+            <rect x="574" y="192" width="184" height="80" rx="3" class="box" style="stroke:var(--rb-glow)"/>
+            <text x="590" y="220" class="t-h" style="font-size:14px">Drift-free dead</text>
+            <text x="590" y="238" class="t-h" style="font-size:14px">reckoning solution</text>
+            <text x="590" y="258" class="t-s">Bounded error between fixes</text>
+            <!-- feedback -->
+            <path d="M420,270 V306 H134 V296" class="ln-dim" stroke-dasharray="4 4" marker-end="url(#arr)"/>
+            <text x="150" y="320" class="t-s">SENSOR BIAS + PHASE AMBIGUITY ESTIMATES FED BACK</text>
+          </svg>
+        </div>
+        <figcaption><b>Fig. 8</b>Sensor fusion architecture. On narrow screens, scroll the diagram sideways.</figcaption>
+      </figure>
+
+      <div class="io">
+        <div class="io-col in">
+          <h3>Telemetry inputs</h3>
+          <ul>
+            <li><b>Cold-Atom Interferometer Phase Shifts</b><span>Raw Δφ per sensing axis, converted to specific force and angular rate.</span></li>
+            <li><b>Star Tracker Optical Fixes</b><span>Orientation of the spacecraft body relative to the celestial frame.</span></li>
+            <li><b>Pulsar Timing Models</b><span>Ephemerides and spin parameters that predict pulse arrival times at any point in the solar system.</span></li>
+          </ul>
+        </div>
+        <div class="io-col out">
+          <h3>System outputs</h3>
+          <ul>
+            <li><b>Autonomous 3D State Vector</b><span>Position and velocity computed on board, with no ground-station round trip.</span></li>
+            <li><b>Drift-Free Dead Reckoning Solution</b><span>Continuous trajectory estimate whose error stays bounded by periodic absolute fixes.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Signal</th><th>Type</th><th>Measures</th><th>Role in the solution</th></tr></thead>
+          <tbody>
+            <tr><td>Cold-atom phase shifts</td><td><span class="dir in">Input</span></td><td>Acceleration, angular velocity</td><td>High-rate relative motion between fixes</td></tr>
+            <tr><td>Star tracker fixes</td><td><span class="dir in">Input</span></td><td>Attitude</td><td>Frame alignment for all sensors</td></tr>
+            <tr><td>Pulsar timing models</td><td><span class="dir in">Input</span></td><td>Range offset along pulsar directions</td><td>Absolute position anchor, bounds drift</td></tr>
+            <tr><td>3D state vector</td><td><span class="dir out">Output</span></td><td>Position, velocity</td><td>Guidance and trajectory verification</td></tr>
+            <tr><td>Dead reckoning solution</td><td><span class="dir out">Output</span></td><td>Continuous trajectory</td><td>Navigation through tracking gaps</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FIGURE 9 -->
+      <figure class="mt-m">
+        <div class="plate">
+          <svg viewBox="0 0 640 320" role="img" aria-labelledby="f9t">
+            <title id="f9t">Notional comparison of position error growth for three navigation approaches.</title>
+            <rect class="p-bg" width="640" height="320"/>
+            <g class="ln" stroke-width="1"><line x1="80" y1="80" x2="610" y2="80"/><line x1="80" y1="140" x2="610" y2="140"/><line x1="80" y1="200" x2="610" y2="200"/></g>
+            <line x1="80" y1="30" x2="80" y2="262" class="ln-dim"/>
+            <line x1="80" y1="262" x2="610" y2="262" class="ln-dim"/>
+            <text x="610" y="284" class="t-s" text-anchor="end">MISSION TIME →</text>
+            <text x="54" y="146" class="t-s" transform="rotate(-90 54 146)" text-anchor="middle">POSITION ERROR (LOG) →</text>
+            <rect x="460" y="18" width="150" height="22" rx="2" style="fill:none;stroke:var(--amber)"/>
+            <text x="535" y="33" class="t-s t-amber" text-anchor="middle">NOTIONAL · NOT DATA</text>
+            <!-- curves -->
+            <path d="M80,258 C190,254 300,190 370,40" class="ln-dim" stroke-width="2.2"/>
+            <path d="M80,258 C280,256 480,222 610,150" class="ln-ps" stroke-width="2.2"/>
+            <path d="M80,258 L150,236 L152,252 L222,232 L224,250 L294,230 L296,250 L366,230 L368,250 L438,230 L440,250 L510,230 L512,250 L582,230 L584,250 L610,242" class="ln-rb" stroke-width="2.2" stroke-linejoin="round"/>
+            <text x="300" y="66" class="t">Conventional IMU</text>
+            <text x="300" y="82" class="t-s">unaided</text>
+            <text x="470" y="170" class="t t-ps">Cold-atom inertial</text>
+            <text x="470" y="186" class="t-s">unaided</text>
+            <text x="388" y="218" class="t t-rb">Cold-atom + pulsar/star fixes</text>
+          </svg>
+        </div>
+        <figcaption><b>Fig. 9</b>The design goal, shown qualitatively. Unaided inertial error grows with time; lower sensor drift slows that growth, and periodic absolute fixes keep it bounded. Curve shapes are illustrative and are not simulation output.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATIONS -->
+<section class="block" id="applications">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num" aria-hidden="true">→</div>
+      <div>
+        <span class="eyebrow">Potential Applications</span>
+        <h2>Where onboard navigation would matter most.</h2>
+      </div>
+    </div>
+    <div class="indent apps">
+      <article class="app">
+        <span class="meta">Deep space</span>
+        <h3>Autonomous deep space trajectory control</h3>
+        <p>A spacecraft that knows its own state can verify and correct its trajectory without waiting for a ground pass.</p>
+        <ul>
+          <li>Time-critical events such as orbit insertion and flybys</li>
+          <li>Navigation through solar conjunction and communication blackouts</li>
+          <li>Less demand on shared Deep Space Network antenna time</li>
+        </ul>
+      </article>
+      <article class="app">
+        <span class="meta">Cislunar</span>
+        <h3>GPS-denied cislunar navigation</h3>
+        <p>Traffic between Earth and the Moon is growing, and most of that volume lies outside reliable GNSS coverage.</p>
+        <ul>
+          <li>Transfers to lunar orbit and halo orbits around Earth–Moon Lagrange points</li>
+          <li>Operations on the lunar far side, out of direct view of Earth</li>
+          <li>A backup reference if ground tracking or relay links are unavailable</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- STATUS -->
+<section class="block" id="status">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num" aria-hidden="true">◎</div>
+      <div>
+        <span class="eyebrow">Research Status</span>
+        <h2>Where the concept stands today.</h2>
+      </div>
+    </div>
+    <div class="indent stack">
+      <div class="split">
+        <div class="prose">
+          <p><strong>Current maturity:</strong> Research Concept. All work to date is theoretical and simulation modeling only. No hardware has been built, tested in a relevant environment, or flown.</p>
+          <p>Evaluation relies on numerical simulation and on published external space research, including flight demonstrations by other organizations of pulsar-based navigation and of cold-atom physics in orbit.</p>
+        </div>
+        <div class="console" aria-label="System status readout">
+          <div><span class="k">PROJECT</span>                 QuantumNav Research</div>
+          <div><span class="k">MATURITY</span>                Research Concept</div>
+          <div><span class="k">SCOPE</span>                   Theory + simulation</div>
+          <div><span class="k">FLIGHT_STATUS</span>           <span class="rb">NOT DEPLOYED</span></div>
+          <div><span class="k">CERTIFICATION</span>           <span class="rb">NONE</span></div>
+          <div><span class="k">SYSTEM_INTEGRATION_STATE</span> <span class="ok">VERIFIED</span> <span class="k">(simulation)</span></div>
+        </div>
+      </div>
+
+      <ol class="roadmap mt-m" aria-label="Research phases">
+        <li class="done"><span class="ph">Phase 0 · Complete</span><h3>Literature review</h3><p>Survey of atom interferometry, pulsar navigation and deep-space tracking research.</p></li>
+        <li class="now"><span class="ph">Phase 1 · Current</span><h3>Simulation modeling</h3><p>Sensor models, filter design and trajectory scenarios in software.</p></li>
+        <li><span class="ph">Phase 2 · Proposed</span><h3>Hardware-in-the-loop</h3><p>Validate algorithms against real sensor data streams on the bench.</p></li>
+        <li><span class="ph">Phase 3 · Proposed</span><h3>Laboratory prototype</h3><p>Demonstrate a component-level breadboard in a laboratory environment.</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- GLOSSARY + REFERENCES -->
+<section class="block" id="glossary">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num" aria-hidden="true">A–Z</div>
+      <div>
+        <span class="eyebrow">Glossary and Background Reading</span>
+        <h2>Terms used on this page.</h2>
+      </div>
+    </div>
+    <div class="indent stack">
+      <dl class="gloss">
+        <div><dt>GNSS</dt><dd>Global Navigation Satellite Systems such as GPS, Galileo, GLONASS and BeiDou.</dd></div>
+        <div><dt>DSN</dt><dd>NASA's Deep Space Network: antenna complexes at Goldstone, Madrid and Canberra.</dd></div>
+        <div><dt>Cold-atom interferometer (CAI)</dt><dd>A sensor that splits and recombines laser-cooled atoms as matter waves to measure inertial forces.</dd></div>
+        <div><dt>Millisecond pulsar</dt><dd>A rapidly rotating neutron star whose radio, X-ray or optical pulses arrive with very regular timing.</dd></div>
+        <div><dt>TOA</dt><dd>Time of arrival: when a pulse is observed, compared with when a timing model predicts it.</dd></div>
+        <div><dt>Dead reckoning</dt><dd>Estimating current position from a known start point plus measured motion over time.</dd></div>
+        <div><dt>State vector</dt><dd>The six numbers that describe a spacecraft's position and velocity in 3D.</dd></div>
+        <div><dt>TRL</dt><dd>Technology Readiness Level, a 1–9 scale from basic principles to flight-proven systems.</dd></div>
+      </dl>
+
+      <div class="stack" style="gap:12px">
+        <h3>Background reading</h3>
+        <ol class="refs">
+          <li>Kasevich, M. and Chu, S. (1991). Atomic interferometry using stimulated Raman transitions. <em>Physical Review Letters</em> 67, 181.</li>
+          <li>NASA Goddard Space Flight Center (2018). SEXTANT demonstration of X-ray pulsar navigation using the NICER instrument on the ISS.</li>
+          <li>NASA Jet Propulsion Laboratory. Cold Atom Laboratory on the International Space Station (operating since 2018).</li>
+          <li>NASA Space Communications and Navigation (SCaN). Deep Space Network overview and capabilities.</li>
+          <li>Sheikh, S. I. et al. (2006). Spacecraft navigation using X-ray pulsars. <em>Journal of Guidance, Control, and Dynamics</em> 29(1).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><strong style="color:var(--ink)">QuantumNav Research</strong> · Research Concept</span>
+    <span>Theoretical and simulation modeling only. Not an aerospace-certified or space-deployed flight system.</span>
+  </div>
+</footer>
+
+<script>
+// Seeded starfields for figure plates
+(function(){
+  var NS="http://www.w3.org/2000/svg";
+  function rng(s){return function(){s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+  document.querySelectorAll("g[data-stars]").forEach(function(g){
+    var n=+g.dataset.stars, r=rng(+g.dataset.seed||1),
+        x0=+(g.dataset.x||0), y0=+(g.dataset.y||0), w=+g.dataset.w, h=+g.dataset.h;
+    for(var i=0;i<n;i++){
+      var c=document.createElementNS(NS,"circle");
+      c.setAttribute("cx",(x0+r()*w).toFixed(1));
+      c.setAttribute("cy",(y0+r()*h).toFixed(1));
+      var big=r();
+      c.setAttribute("r",(big>.94?1.6:big>.75?1:.6).toFixed(1));
+      c.setAttribute("class","star");
+      c.setAttribute("opacity",(.25+r()*.6).toFixed(2));
+      g.appendChild(c);
+    }
+  });
+})();
+</script>

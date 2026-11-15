@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html, body { background: #050B16; color: #DCE6F2; }
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: #050B16; }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.tnum { font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 2px solid #4FD1EE; outline-offset: 2px; border-radius: 3px; }
+input[type="range"] { accent-color: #4FD1EE; }
+.leaflet-container { background: #071222 !important; font-family: inherit; }
+.leaflet-control-attribution { background: rgba(5, 11, 22, 0.8) !important; color: #8A9BB3 !important; }
+.leaflet-control-attribution a { color: #8BE3F7 !important; }
+.leaflet-bar a { background: #13223A !important; color: #DCE6F2 !important; border-color: #2A4468 !important; }
+.scene-label { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: #DCE6F2; white-space: nowrap; pointer-events: none; text-shadow: 0 0 4px #000; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

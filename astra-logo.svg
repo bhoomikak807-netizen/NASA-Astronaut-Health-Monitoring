@@ -1,0 +1,18 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#58C7FF" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.6" />
+    </linearGradient>
+    <linearGradient id="orbitGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#58C7FF" stop-opacity="0.2" />
+      <stop offset="50%" stop-color="#58C7FF" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+  <path d="M24 4L7 11V22C7 32.5 14.2 42.1 24 44.5C33.8 42.1 41 32.5 41 22V11L24 4Z" stroke="url(#shieldGrad)" stroke-width="2" fill="#05070D" />
+  <ellipse cx="24" cy="24" rx="18" ry="7" transform="rotate(-28 24 24)" stroke="url(#orbitGrad)" stroke-width="1.5" stroke-dasharray="2 1.5" />
+  <circle cx="38" cy="17" r="2.5" fill="#58C7FF" />
+  <path d="M24 14L26.2 21.8L34 24L26.2 26.2L24 34L21.8 26.2L14 24L21.8 21.8L24 14Z" fill="#58C7FF" />
+  <circle cx="24" cy="24" r="1.5" fill="#FFFFFF" />
+</svg>

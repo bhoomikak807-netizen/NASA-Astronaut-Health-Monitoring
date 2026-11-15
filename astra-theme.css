@@ -1,0 +1,8 @@
+:root{--bg:#05070D!important;--panel:rgba(14,26,50,.78)!important;--cyan:#58C7FF!important;--cyan2:#A5E4FF!important;--text:#F8FAFC!important;--mute:#94A3B8!important;--line:rgba(88,199,255,.35)!important;--ok:#10B981!important;--warn:#F59E0B!important;--crit:#EF4444!important}
+body{font-family:'Inter',system-ui,sans-serif!important}
+.eyebrow,.tag,.brand small,label{font-family:'JetBrains Mono',ui-monospace,monospace!important}
+.card{background:linear-gradient(165deg,rgba(18,32,58,.72),rgba(7,14,30,.8))!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(140,200,255,.18)!important;box-shadow:inset 0 1px 0 rgba(200,230,255,.06),0 10px 40px rgba(0,0,0,.35)!important}
+.m{background:rgba(5,10,22,.6)!important;border-color:rgba(88,199,255,.25)!important}
+html.astra-embed header,html.astra-embed .stars{display:none!important}
+html.astra-embed main{padding-top:8px!important;max-width:none!important}
+html.astra-embed #alert{position:sticky!important}

@@ -1,0 +1,12 @@
+<!-- ASTRA-SENTINEL theme bridge: site fonts, site colours, and a transparent background when embedded in the main site -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<script>(function(){var d=document.documentElement;d.setAttribute('data-theme','dark');try{if(window.self!==window.top)d.classList.add('astra-embed')}catch(e){d.classList.add('astra-embed')}})();</script>
+<style id="astra-theme-common">
+html:not(.astra-embed) body{background:radial-gradient(1100px 650px at 70% 30%,rgba(45,100,220,.3),transparent 62%),radial-gradient(900px 600px at 10% 5%,rgba(110,90,240,.16),transparent 60%),linear-gradient(180deg,#02040b 0%,#050c1d 45%,#07152c 100%) fixed!important}
+html.astra-embed,html.astra-embed body{background:transparent!important;min-height:0!important}
+html.astra-embed body::before{display:none!important}
+h1,h2,h3,h4{font-family:'Space Grotesk',system-ui,sans-serif!important;letter-spacing:-.01em}
+code,kbd,.mono{font-family:'JetBrains Mono',ui-monospace,monospace!important}
+::selection{background:rgba(88,199,255,.25)}
+</style>

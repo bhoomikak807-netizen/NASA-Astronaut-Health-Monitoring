@@ -1,16 +1,39 @@
 {
-  "name": "astra-sentinel-ai-project",
+  "name": "quantumnav-live",
   "private": true,
-  "type": "commonjs",
-  "description": "ASTRA-SENTINEL AI website. Run `npm install` then `npm run dev` from this folder.",
-  "engines": {
-    "node": ">=18"
-  },
+  "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "postinstall": "npm --prefix frontend install --no-audit --no-fund",
-    "dev": "npm --prefix frontend run dev -- --open",
-    "build": "npm --prefix frontend run build",
-    "preview": "npm --prefix frontend run preview -- --port 4173 --open",
-    "test": "node --test part4-engine/engine.test.js"
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "build:artifact": "npm run build && node scripts/to-artifact.mjs"
+  },
+  "dependencies": {
+    "@react-three/drei": "9.114.3",
+    "@react-three/fiber": "8.17.10",
+    "leaflet": "1.9.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "recharts": "2.13.3",
+    "three": "0.169.0",
+    "topojson-client": "3.1.0",
+    "world-atlas": "2.0.2"
+  },
+  "devDependencies": {
+    "@types/geojson": "7946.0.14",
+    "@types/leaflet": "1.9.14",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@types/three": "0.169.0",
+    "@types/topojson-client": "3.1.5",
+    "@vitejs/plugin-react": "4.3.4",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.49",
+    "tailwindcss": "3.4.17",
+    "typescript": "5.6.3",
+    "vite": "5.4.11",
+    "vite-plugin-singlefile": "2.0.3"
   }
 }
